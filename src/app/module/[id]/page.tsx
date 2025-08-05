@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { getIdToken } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
-import Link from 'next/link';
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getIdToken } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import Link from "next/link";
 
 interface Module {
   id: string;
@@ -14,7 +14,13 @@ interface Module {
   pptUrl: string;
 }
 
-const moduleOrder = ['ai', 'ai-insurance', 'ai-compliance', 'ethical-ai', 'future-of-ai'];
+const moduleOrder = [
+  "ai",
+  "ai-insurance",
+  "ai-compliance",
+  "ethical-ai",
+  "future-of-ai",
+];
 
 export default function ModulePage() {
   const { id } = useParams();
@@ -22,7 +28,9 @@ export default function ModulePage() {
 
   useEffect(() => {
     async function fetchModule() {
-      const res = await fetch(`https://ai-training-backend-comply-production.up.railway.app/api/modules`);
+      const res = await fetch(
+        `https://ai-training-backend-comply-production.up.railway.app/api/modules`
+      );
       const data: Module[] = await res.json();
       const matched = data.find((m) => m.id === id);
       setModule(matched || null);
@@ -33,23 +41,26 @@ export default function ModulePage() {
 
   const handleMarkComplete = async () => {
     const user = auth.currentUser;
-    if (!user) return alert('Please login first');
+    if (!user) return alert("Please login first");
 
     const token = await getIdToken(user);
 
-    const res = await fetch('https://ai-training-backend-comply-production.up.railway.app/api/progress/complete', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ moduleId: id }),
-    });
+    const res = await fetch(
+      "https://ai-training-backend-comply-production.up.railway.app/api/progress/complete",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ moduleId: id }),
+      }
+    );
 
     if (res.ok) {
-      alert('✅ Marked as complete!');
+      alert("✅ Marked as complete!");
     } else {
-      alert('❌ Error marking as complete.');
+      alert("❌ Error marking as complete.");
     }
   };
 
@@ -58,7 +69,10 @@ export default function ModulePage() {
   // 🧭 Navigation logic
   const currentIndex = moduleOrder.indexOf(id as string);
   const prevId = currentIndex > 0 ? moduleOrder[currentIndex - 1] : null;
-  const nextId = currentIndex < moduleOrder.length - 1 ? moduleOrder[currentIndex + 1] : null;
+  const nextId =
+    currentIndex < moduleOrder.length - 1
+      ? moduleOrder[currentIndex + 1]
+      : null;
 
   return (
     <div className="p-8 max-w-3xl mx-auto space-y-6">
@@ -75,13 +89,25 @@ export default function ModulePage() {
         />
       </div>
 
-      <a
+      {/* <a
         href={module.pptUrl}
         target="_blank"
         className="inline-block bg-green-600 text-white px-4 py-2 rounded"
       >
         📥 Download PPT
-      </a>
+      </a> */}
+      <div className="w-full h-[500px] mt-4">
+        <iframe
+          // src={`https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(
+          //   module.pptUrl
+          // )}`}
+          src={`${module.pptUrl}`}
+          width="100%"
+          height="100%"
+          frameBorder="0"
+          allowFullScreen
+        />
+      </div>
 
       <button
         onClick={handleMarkComplete}
@@ -99,7 +125,9 @@ export default function ModulePage() {
           >
             ← Previous
           </Link>
-        ) : <div />}
+        ) : (
+          <div />
+        )}
 
         {nextId ? (
           <Link
@@ -108,7 +136,9 @@ export default function ModulePage() {
           >
             Next →
           </Link>
-        ) : <div />}
+        ) : (
+          <div />
+        )}
       </div>
     </div>
   );
