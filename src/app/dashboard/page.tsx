@@ -31,11 +31,11 @@ export default function DashboardPage() {
     async function fetchData() {
       const token = await getIdToken(user!);
 
-      const moduleRes = await fetch("http://localhost:5000/api/modules");
+      const moduleRes = await fetch("https://ai-training-backend-comply-production.up.railway.app/api/modules");
       const modulesData: Module[] = await moduleRes.json();
       setModules(modulesData);
 
-      const progressRes = await fetch("http://localhost:5000/api/progress", {
+      const progressRes = await fetch("https://ai-training-backend-comply-production.up.railway.app/api/progress", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

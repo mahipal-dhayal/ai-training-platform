@@ -27,7 +27,7 @@ export default function CertificatePage() {
       const token = await getIdToken(user!);
       setUserEmail(user!.email || "");
 
-      const res = await fetch("http://localhost:5000/api/progress", {
+      const res = await fetch("https://ai-training-backend-comply-production.up.railway.app/api/progress", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

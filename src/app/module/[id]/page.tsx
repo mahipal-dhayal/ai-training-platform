@@ -22,7 +22,7 @@ export default function ModulePage() {
 
   useEffect(() => {
     async function fetchModule() {
-      const res = await fetch(`http://localhost:5000/api/modules`);
+      const res = await fetch(`https://ai-training-backend-comply-production.up.railway.app/api/modules`);
       const data: Module[] = await res.json();
       const matched = data.find((m) => m.id === id);
       setModule(matched || null);
@@ -37,7 +37,7 @@ export default function ModulePage() {
 
     const token = await getIdToken(user);
 
-    const res = await fetch('http://localhost:5000/api/progress/complete', {
+    const res = await fetch('https://ai-training-backend-comply-production.up.railway.app/api/progress/complete', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
